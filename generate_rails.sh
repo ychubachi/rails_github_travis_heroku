@@ -13,15 +13,18 @@
 # 準備
 # ================================================================
 
+if [ $# -ne 1 ]; then
+    echo "Usage: source $0 <app_name>"
+    exit 1
+fi
+app_name=$1
+
 # 色付きecho
 function my_echo { command echo -e "\e[33m$*\e[m"; }
 
 # ================================================================
 # herokuにアプリを生成
 # ================================================================
-
-read -p 'Enter your app name: ' app_name
-echo $app_name
 
 my_echo 'projectディレクトリを作成します'
 mkdir ${app_name}
