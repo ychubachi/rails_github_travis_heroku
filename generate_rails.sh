@@ -23,7 +23,7 @@ app_name=$1
 function my_echo { command echo -e "\e[33m$*\e[m"; }
 
 # ================================================================
-# herokuにアプリを生成
+# gitリポジトリを生成
 # ================================================================
 
 my_echo 'projectディレクトリを作成します'
@@ -34,7 +34,7 @@ my_echo 'ローカルgitリポジトリを作成します'
 git init
 
 # ================================================================
-# Railsアプリを作成します
+# Railsアプリを作成
 # ================================================================
 
 my_echo 'Railsアプリを作成します'
@@ -81,6 +81,10 @@ bundle install --without production
 my_echo 'ここまでの内容をcommitします'
 git stage .
 git commit -m 'Change database settings in Gemfile'
+
+# ================================================================
+# welcomeコントローラを生成
+# ================================================================
 
 my_echo 'welcomeコントローラを生成します'
 rails generate controller welcome index
@@ -155,7 +159,5 @@ git push origin master
 # ================================================================
 
 my_echo 'しばらくするとtravisでbuildがはじまります'
-my_echo 'travis status, travis logを実行してください'
-
 my_echo 'heroku上のアプリは下記Web URLからアクセスできます'
 heroku apps:info
