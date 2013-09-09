@@ -102,6 +102,11 @@ git commit -m 'Create welcome controller'
 
 my_echo 'GetHubにリポジトリを作成します'
 hub create
+if [ $? -ne 0 ]; then
+    my_echo "hubコマンドをインストールしてください"
+    my_echo "https://github.com/github/hub"
+    exit 1
+fi
 
 my_echo 'upstreamを設定してGitHubにpushします'
 git push -u origin master
@@ -122,6 +127,9 @@ heroku addons:add heroku-postgresql:dev
 
 my_echo 'travisコマンドのインストール（アップデート）'
 gem install travis
+
+my_echo 'travisにloginします'
+travis login --github-token
 
 my_echo 'travisを初期化します'
 yes Ruby | travis init; echo ''
