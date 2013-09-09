@@ -4,7 +4,6 @@
 # ・Rails appを生成し，github,travis,herokuと連携させます
 # ・下記の準備が終わっていることを前提とします
 #   - ssh鍵の生成とgithubへの登録
-#   - heroku login
 # - Create and register an SSH key for your github account
 #   - https://gist.github.com/acoulton/1969779
 # ================================================================
@@ -51,10 +50,12 @@ git commit -m 'Generate a new Rails application'
 # RspecのためGemfileを編集
 # ================================================================
 
-my_echo 'rspecの設定を生成'
+my_echo 'rspecのためのGemfile設定を追加'
 echo "gem 'rspec-rails', '~> 2.0', group: [:development, :test]" >> Gemfile
 bundle install
-# rbenv rehash
+rbenv rehash
+
+my_echo 'rspecの設定を生成'
 rails generate rspec:install
 
 my_echo 'ここまでの内容をcommitします'
@@ -102,11 +103,7 @@ git commit -m 'Create welcome controller'
 
 my_echo 'GetHubにリポジトリを作成します'
 hub create
-if [ $? -ne 0 ]; then
-    my_echo "hubコマンドをインストールしてください"
-    my_echo "https://github.com/github/hub"
-    exit 1
-fi
+if [ $? != 0 ]; then exit; fi
 
 my_echo 'upstreamを設定してGitHubにpushします'
 git push -u origin master
@@ -115,11 +112,17 @@ git push -u origin master
 # heroku
 # ================================================================
 
+my_echo 'herokuにログインします'
+heroku login
+if [ $? != 0 ]; then exit; fi
+
 my_echo 'herokuでアプリを作ります'
 heroku create
+if [ $? != 0 ]; then exit; fi
 
 my_echo 'herokuにpostgresqlアドオンを追加します'
 heroku addons:add heroku-postgresql:dev
+if [ $? != 0 ]; then exit; fi
 
 # ================================================================
 # travis CI用の設定を作成します
@@ -127,12 +130,15 @@ heroku addons:add heroku-postgresql:dev
 
 my_echo 'travisコマンドのインストール（アップデート）'
 gem install travis
+rbenv rehash
 
-my_echo 'travisにloginします'
-travis login --github-token
+my_echo 'GitHubのアカウントでtravisにloginします'
+travis login
+if [ $? != 0 ]; then exit; fi
 
 my_echo 'travisを初期化します'
 yes Ruby | travis init; echo ''
+if [ $? != 0 ]; then exit; fi
 
 my_echo '.travis.ymlを上書き（travis initだと，使用しないversionのrubyも設定される）'
 cat << EOS > .travis.yml
@@ -147,6 +153,7 @@ git commit -m 'Create .travis.yml'
 
 my_echo '.travis.ymlファイルにherokuのための情報を追加します'
 yes | travis setup heroku; echo ''
+if [ $? != 0 ]; then exit; fi
 
 my_echo '.travis.ymlファイルにdb:migrateのための情報を追加します'
 echo '  run: "rake db:migrate"' >> .travis.yml
@@ -169,3 +176,6 @@ git push origin master
 my_echo 'しばらくするとtravisでbuildがはじまります'
 my_echo 'heroku上のアプリは下記Web URLからアクセスできます'
 heroku apps:info
+
+my_echo "アプリを${app_name}ディレクトリに作成しました"
+my_echo "cd ${app_name} を実行してください"
