@@ -13,7 +13,7 @@ Railsアプリを作成し，GitHub，Travis CI，Herokuと連携する設定を
 GitHubへSSH公開鍵を登録していない場合は下記のコマンドを実行してください．
 
 ```
-$ ./github-connect.sh <app_name>
+$ ./github-connect.sh
 ```
 
 （このscriptは[Create and register an SSH key for your github account](https://gist.github.com/acoulton/1969779)から一部を改変したものです．）
