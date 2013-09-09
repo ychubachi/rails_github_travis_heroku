@@ -18,7 +18,7 @@ $ ./github-connect.sh <app_name>
 
 （このscriptは[Create and register an SSH key for your github account](https://gist.github.com/acoulton/1969779)から一部を改変したものです．）
 
-## 使い方
+## Railsアプリの自動生成
 
 下記のコマンドを実行してください．
 
