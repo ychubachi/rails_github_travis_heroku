@@ -116,6 +116,10 @@ my_echo 'herokuにログインします'
 heroku login
 if [ $? != 0 ]; then exit; fi
 
+my_echo 'herokuにssh公開鍵を登録します'
+heroku keys:add
+if [ $? != 0 ]; then exit; fi
+
 my_echo 'herokuでアプリを作ります'
 heroku create
 if [ $? != 0 ]; then exit; fi
