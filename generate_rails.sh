@@ -128,6 +128,9 @@ my_echo 'herokuにpostgresqlアドオンを追加します'
 heroku addons:add heroku-postgresql:dev
 if [ $? != 0 ]; then exit; fi
 
+my_echo 'herokuにアプリをdeployします'
+git push heroku master
+
 # ================================================================
 # travis CI用の設定を作成します
 # ================================================================
@@ -177,9 +180,8 @@ git push origin master
 # 完了
 # ================================================================
 
+my_echo "アプリを${app_name}ディレクトリに作成しました"
+my_echo "cd ${app_name} を実行してください"
 my_echo 'しばらくするとtravisでbuildがはじまります'
 my_echo 'heroku上のアプリは下記Web URLからアクセスできます'
 heroku apps:info
-
-my_echo "アプリを${app_name}ディレクトリに作成しました"
-my_echo "cd ${app_name} を実行してください"
