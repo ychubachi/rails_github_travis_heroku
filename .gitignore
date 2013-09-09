@@ -2,3 +2,4 @@
 !/.gitignore
 !/README.md
 !/generate_rails.sh
+!/github-connect.sh
