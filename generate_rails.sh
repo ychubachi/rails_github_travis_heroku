@@ -22,6 +22,26 @@ app_name=$1
 function my_echo { command echo -e "\e[33m$*\e[m"; }
 
 # ================================================================
+# Heroku, Travis CIにログインする
+# ================================================================
+
+my_echo 'herokuにログインします'
+heroku login
+if [ $? != 0 ]; then exit; fi
+
+my_echo 'herokuにssh公開鍵を登録します'
+heroku keys:add
+if [ $? != 0 ]; then exit; fi
+
+my_echo 'travisコマンドのインストール（アップデート）'
+gem install travis
+rbenv rehash
+
+my_echo 'GitHubのアカウントでtravisにloginします'
+travis login
+if [ $? != 0 ]; then exit; fi
+
+# ================================================================
 # gitリポジトリを生成
 # ================================================================
 
@@ -112,14 +132,6 @@ git push -u origin master
 # heroku
 # ================================================================
 
-my_echo 'herokuにログインします'
-heroku login
-if [ $? != 0 ]; then exit; fi
-
-my_echo 'herokuにssh公開鍵を登録します'
-heroku keys:add
-if [ $? != 0 ]; then exit; fi
-
 my_echo 'herokuでアプリを作ります'
 heroku create
 if [ $? != 0 ]; then exit; fi
@@ -134,14 +146,6 @@ git push heroku master
 # ================================================================
 # travis CI用の設定を作成します
 # ================================================================
-
-my_echo 'travisコマンドのインストール（アップデート）'
-gem install travis
-rbenv rehash
-
-my_echo 'GitHubのアカウントでtravisにloginします'
-travis login
-if [ $? != 0 ]; then exit; fi
 
 my_echo 'travisを初期化します'
 yes Ruby | travis init; echo ''
