@@ -25,3 +25,5 @@ $ ./github-connect.sh
 ```
 $ ./generate_rails.sh <app_name>
 ```
+
+Heroku，Travis CIへのログインの後，アプリの生成が始まります．
